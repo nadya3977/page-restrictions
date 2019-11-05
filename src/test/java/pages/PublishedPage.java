@@ -1,12 +1,9 @@
 package pages;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class PublishedPage extends BasePage {
 
@@ -22,7 +19,6 @@ public class PublishedPage extends BasePage {
     private WebElement restrictedTitle;
 
 
-
     public PublishedPage(WebDriver driver) {
         if (!driver.getCurrentUrl().contains(URL_MATCH)) {
             throw new IllegalStateException("Unexpected page");
@@ -34,27 +30,26 @@ public class PublishedPage extends BasePage {
 
     public boolean isRestrictionButtonDisplayed() {
 
-        waitForVisibility(restrictionsButton);
-
+       // waitForVisibility(restrictionsButton);
         return restrictionsButton.isDisplayed();
     }
 
-    public String title(){
+    public String title() {
 
-        new WebDriverWait(driver,10).until(ExpectedConditions.visibilityOf(titleText));
+        waitForVisibility(titleText);
         return titleText.getText();
-
     }
 
     public boolean isRestrictedTitleShown(){
         return restrictedTitle.isDisplayed();
     }
 
-    public RestrictionsPopUp clickRestrictionButton() {
-        waitForVisibility(restrictionsButton);
-        new WebDriverWait(driver, 10).until(ExpectedConditions.visibilityOfAllElementsLocatedBy((By.xpath("//button[@data-test-id='restrictions.dialog.button']"))));
+    public RestrictionsPopUpPage clickRestrictionButton() {
+       // waitForVisibility(restrictionsButton);
+        waitUntilAllElementsAreVisible("//button[@data-test-id='restrictions.dialog.button']");
         waitToBeClickableAndClick(restrictionsButton);
-        return new RestrictionsPopUp(driver);
+        waitUntilAllElementsAreVisible("//div[@data-test-id='restrictions-dialog-modal']");
+        return new RestrictionsPopUpPage(driver);
     }
 
 }

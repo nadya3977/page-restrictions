@@ -31,6 +31,17 @@ public abstract class BasePage {
     }
 
     public void waitUntilUrlContains(String url) {
-        new WebDriverWait(driver, 10).until(ExpectedConditions.urlContains(url));
+        new WebDriverWait(driver, 15).until(ExpectedConditions.urlContains(url));
     }
+
+    public void waitUntilAllElementsAreVisible(String xpath) {
+        new WebDriverWait(driver, 10).until(ExpectedConditions.visibilityOfAllElementsLocatedBy((By.xpath(xpath))));
+
+    }
+    public void waitUntilAllElementsAreNotVisible(String xpath) {
+        new WebDriverWait(driver, 10).until(ExpectedConditions.not(ExpectedConditions.visibilityOfAllElementsLocatedBy((By.xpath(xpath)))));
+
+    }
+
+
 }

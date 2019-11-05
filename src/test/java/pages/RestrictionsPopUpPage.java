@@ -1,13 +1,14 @@
 package pages;
 
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 
-public class RestrictionsPopUp extends BasePage {
+public class RestrictionsPopUpPage extends BasePage {
 
     private static String URL_MATCH = "/pages";
 
@@ -41,46 +42,41 @@ public class RestrictionsPopUp extends BasePage {
 
 
 
-    public RestrictionsPopUp(WebDriver driver) {
+    public RestrictionsPopUpPage(WebDriver driver) {
         if (!driver.getCurrentUrl().contains(URL_MATCH)) {
             throw new IllegalStateException("Unexpected page");
         }
-
         PageFactory.initElements(driver, this);
         this.driver = driver;
     }
 
     public boolean isEditRestrictionsDropDownDisplayed() {
-
-        waitForVisibility(editRestrictionsDropDown);
+      //  waitForVisibility(editRestrictionsDropDown);
         return editRestrictionsDropDown.isDisplayed();
     }
 
-    public boolean isEditUserPermissionsDropDownDisplayed() {
-        waitForVisibility(editUserPermissionsDropDown);
-        return editUserPermissionsDropDown.isDisplayed();
-    }
 
     public void clickAddButton() {
         addButton.click();
     }
 
-
     public PublishedPage clickApplyButton(){
+        waitForVisibility(restrictionsDialog);
         waitToBeClickableAndClick(applyButton);
-       // new WebDriverWait(driver,10).until(ExpectedConditions.invisibilityOf(restrictionsDialog));
+        waitUntilAllElementsAreNotVisible("//div[@data-test-id='restrictions-dialog-modal']");
         return new PublishedPage(driver);
     }
 
     public PublishedPage clickCancelButton(){
+        waitForVisibility(restrictionsDialog);
         waitToBeClickableAndClick(cancelButton);
-    //    new WebDriverWait(driver,10).until(ExpectedConditions.invisibilityOf(restrictionsDialog));
+        waitUntilAllElementsAreNotVisible("//div[@data-test-id='restrictions-dialog-modal']");
         return new PublishedPage(driver);
     }
 
     public boolean isCancelButtonEnabled() {
 
-        waitForVisibility(cancelButton);
+      //  waitForVisibility(cancelButton);
         return cancelButton.isEnabled();
     }
 
@@ -91,11 +87,7 @@ public class RestrictionsPopUp extends BasePage {
         }
         else {
             editRestrictionsDropDown.click();
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException ie) {
-            }
-
+            waitToBePresent("//*[contains(text(),'" + permission + "')]");
             waitToBeClickableAndClick(driver.findElement(By.xpath("//*[contains(text(),'" + permission + "')]")));
             return clickApplyButton();
         }
@@ -110,18 +102,15 @@ public class RestrictionsPopUp extends BasePage {
         waitToBeClickableAndClick(editRestrictionsDropDown);
         waitToBeClickableAndClick(driver.findElement(By.xpath("//*[contains(text(),'" + permission + "')]")));
         waitToBeClickableAndClick(restrictionsAddUserField);
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException ie) {
-        }
 
+        waitToBePresent("//div[@data-test-id='user-and-group-search']/descendant::input");
         restrictionsAddUserInputField.sendKeys(name);
-
+      //  waitUntilAllElementsAreVisible("//div[@data-test-id='user-and-group-search']");
         try {
-            Thread.sleep(2000);
+            Thread.sleep(1000);
         } catch (InterruptedException ie) {
         }
-
+        waitUntilAllElementsAreVisible("//div[@data-test-id='user-and-group-search']//div[contains(@class,'menu')]");
         restrictionsAddUserInputField.sendKeys(Keys.ENTER);
 
         waitToBeClickableAndClick(editUserPermissionsDropDown);
@@ -139,7 +128,6 @@ public class RestrictionsPopUp extends BasePage {
     public String checkAddedUsePermissions( String name) {
 
         String className= driver.findElement(By.xpath("//tr[contains(@class,'TableRow')]//div[contains(text(),'"+name+"')]/ancestor::tr[contains(@class,'TableRow')]")).getAttribute("class");
-
         return driver.findElement(By.xpath("//tr[contains(@class,'"+className+"')]//div[contains(@class,'singleValue')]/span")).getText();
     }
 }
