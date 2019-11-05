@@ -12,7 +12,6 @@ public class BaseTest {
 
     @BeforeClass
     public static void driver() {
-        System.setProperty("webdriver.chrome.driver", "/Users/nyusupova/Downloads/chromedriver2");
         driver = new ChromeDriver();
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
     }

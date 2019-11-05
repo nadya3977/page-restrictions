@@ -14,9 +14,9 @@ public class ModifyRestrictionsTest extends BaseTest {
     public void myFirstTest() throws InterruptedException {
         LoginPage loginPage = new LoginPage(driver);
         loginPage.navigateToLogin();
-        HomePage homePage = loginPage.login(System.getenv("TEST_EMAIL"), "63977Attl");
+        HomePage homePage = loginPage.login(System.getProperty("test.email1"), System.getProperty("test.password1"));
         // driver.get("https://nvyu.atlassian.net/wiki/spaces/TESTSPACE/pages/65575/bla2");
-        PublishedPage page = homePage.navigateToPublishedPage("https://nvyu.atlassian.net/wiki/spaces/TESTSPACE/pages/65575/bla2");
+        PublishedPage page = homePage.navigateToPublishedPage(System.getProperty("test.page_url"));
 
         //initial check
 
@@ -53,8 +53,8 @@ public class ModifyRestrictionsTest extends BaseTest {
         homePage.logOut();
 
         Thread.sleep(2000);
-        loginPage.login("n5@mailforspam.com", "123P@ssword");
-        homePage.navigateToPublishedPage("https://nvyu.atlassian.net/wiki/spaces/TESTSPACE/pages/65575/bla2");
+        loginPage.login(System.getProperty("test.email2"), System.getProperty("test.password2"));
+        homePage.navigateToPublishedPage(System.getProperty("test.page_url"));
         assertEquals("bla2", page.title());
 
         //login with user who was not added - not able to access the page
@@ -62,8 +62,8 @@ public class ModifyRestrictionsTest extends BaseTest {
         Thread.sleep(2000);
         homePage.logOut();
         Thread.sleep(2000);
-        loginPage.login("n4@mailforspam.com", "123P@ssword");
-        homePage.navigateToPublishedPage("https://nvyu.atlassian.net/wiki/spaces/TESTSPACE/pages/65575/bla2");
+        loginPage.login(System.getProperty("test.email3"), System.getProperty("test.password3"));
+        homePage.navigateToPublishedPage(System.getProperty("test.page_url"));
         assertTrue(page.isRestrictedTitleShown());
     }
 }
