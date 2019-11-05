@@ -4,7 +4,7 @@ import org.junit.Test;
 import pages.HomePage;
 import pages.LoginPage;
 import pages.PublishedPage;
-import pages.RestrictionsPopUp;
+import pages.RestrictionsPopUpPage;
 
 import static org.junit.Assert.*;
 
@@ -22,7 +22,7 @@ public class ModifyRestrictionsTest extends BaseTest {
 
         Thread.sleep(2000);
         assertTrue(page.isRestrictionButtonDisplayed());
-        RestrictionsPopUp popup = page.clickRestrictionButton();
+        RestrictionsPopUpPage popup = page.clickRestrictionButton();
         assertTrue(popup.isEditRestrictionsDropDownDisplayed());
         assertTrue(popup.isCancelButtonEnabled());
 
